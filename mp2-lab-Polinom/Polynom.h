@@ -29,7 +29,7 @@ public:
 	}
 	friend ostream& operator<<(ostream& out, const TMonom &m)
 	{
-		out <<m.coef<<"(x^"<< m.p_x<<")"<<"(y^"<<m.p_y <<")"<<"(z^"<< m.p_z<<")";
+		out << m.coef << "(x^" << m.p_x << ")" << "(y^" << m.p_y << ")" << "(z^" << m.p_z << ")";
 		return out;
 	}
 };
@@ -48,7 +48,7 @@ bool TMonom::operator>(const TMonom &m) {
 	int st_f, st_s;
 	st_f = p_x * 100 + p_y * 10 + p_z;
 	st_s = m.p_x * 100 + m.p_y * 10 + m.p_z;
-	if (st_f>st_s)
+	if (st_f > st_s)
 	{
 		return true;
 	}
@@ -97,9 +97,9 @@ bool TMonom::operator<=(const TMonom &m) {
 }
 
 bool TMonom::operator!=(const TMonom &m) {
-	if (*this==m)
+	if (*this == m)
 	{
-		return 0;	
+		return 0;
 	}
 	else
 	{
@@ -112,12 +112,12 @@ bool TMonom::operator!=(const TMonom &m) {
 class TPolynom :public THeadList<TMonom> {
 public:
 	TPolynom() :THeadList<TMonom>() {
-		pHead->val.coef=0;
+		pHead->val.coef = 0;
 		pHead->val.p_x = 0;
 		pHead->val.p_y = 0;
 		pHead->val.p_z = -1;
 	}
-	TPolynom(int monoms[][2], int n) :THeadList<TMonom>(){
+	TPolynom(int monoms[][2], int n) :THeadList<TMonom>() {
 		pHead->val.coef = 0;
 		pHead->val.p_x = 0;
 		pHead->val.p_y = 0;
@@ -126,10 +126,10 @@ public:
 		for (int i = 0; i < n; i++)
 		{
 			M.coef = monoms[i][0];
-			M.p_z = monoms[i][1] % 10;
 			M.p_x = monoms[i][1] / 100;
 			M.p_y = monoms[i][1] / 10 % 10;
-			InsLast(M);
+			M.p_z = monoms[i][1] % 10;
+			AddMonom(M);
 		}
 	}
 	TPolynom(TPolynom & P) : THeadList<TMonom>() {
@@ -138,7 +138,7 @@ public:
 		pHead->val.p_y = 0;
 		pHead->val.p_z = -1;
 		TMonom M;
-		for (P.Reset();!P.IsEnd();P.GoNext())
+		for (P.Reset(); !P.IsEnd(); P.GoNext())
 		{
 			M = P.pCurr->val;
 			InsLast(M);
@@ -147,10 +147,10 @@ public:
 	void AddMonom(const TMonom &M) {
 		int flag = 0;
 		for (Reset(); !IsEnd(); GoNext()) {
-			if (pCurr->val == M) 
+			if (pCurr->val == M)
 			{
 				pCurr->val.coef += M.coef;
-				if (pCurr->val.coef == 0) 
+				if (pCurr->val.coef == 0)
 				{
 					DelCurr();
 					flag = 1;
@@ -179,7 +179,7 @@ public:
 		return res;
 	}
 	void operator*=(double a) {
-	
+
 		for (Reset(); !IsEnd(); GoNext())
 		{
 			pCurr->val.coef *= a;
@@ -202,13 +202,14 @@ public:
 	TPolynom operator *(TMonom M) {
 		TPolynom res(*this);
 		for (res.Reset(); !res.IsEnd(); res.GoNext()) {
-			res.pCurr->val.p_x +=M.p_x;
+			res.pCurr->val.p_x += M.p_x;
 			res.pCurr->val.p_y += M.p_y;
 			res.pCurr->val.p_z += M.p_z;
 			res.pCurr->val.coef *= M.coef;
 		}
 		return res;
 	}
+
 	void operator +=(TPolynom& Q) {
 		TMonom pm, qm, rm;
 		Reset();
@@ -217,13 +218,13 @@ public:
 		{
 			pm = pCurr->val;
 			qm = Q.pCurr->val;
-			if (pm>qm)
+			if (pm > qm)
 			{
 				GoNext();
 			}
 			else
 			{
-				if (pm>qm)
+				if (pm < qm)
 				{
 					InsCurr(qm);
 					Q.GoNext();
@@ -231,7 +232,7 @@ public:
 				else {
 					rm = pm;
 					rm.coef += qm.coef;
-					if (rm.coef==0)
+					if (rm.coef == 0)
 					{
 						DelCurr();
 						Q.GoNext();
@@ -244,13 +245,13 @@ public:
 					}
 				}
 			}
-			
+
 		}
-		
+
 	}
-	
+
 	friend istream& operator>>(istream &in, TPolynom &p) {
-		TMonom m; 
+		TMonom m;
 		in >> m;
 		while (m.coef != 0) {
 			p.InsLast(m);
@@ -261,12 +262,15 @@ public:
 	friend ostream& operator<<(ostream &out, TPolynom &p)
 	{
 		for (p.Reset(); !p.IsEnd(); p.GoNext()) {
-			if (p.pCurr->val.coef < 0 || p.pCurr==p.pFirst)
+			if (p.pCurr->val.coef < 0 || p.pCurr == p.pFirst)
 				out << p.pCurr->val;
 			else
 				out << " + " << p.pCurr->val;
 		}
+		if (p.pFirst == p.pStop)
+		{
+			out << "0";
+		}
 		return out;
 	}
 };
-

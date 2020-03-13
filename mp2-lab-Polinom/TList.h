@@ -8,12 +8,12 @@ struct TNode
 {
 	T val;
 	TNode<T> *pNext;
-};	
+};
 
 template <class T>
-class TList { 
+class TList {
 protected:
-	TNode<T> *pFirst,*pLast,*pCurr,*pPrev,*pStop;
+	TNode<T> *pFirst, *pLast, *pCurr, *pPrev, *pStop;
 	int pos, size;
 public:
 	TList();
@@ -27,7 +27,7 @@ public:
 	void InsLast(const T& a);
 	void InsCurr(const T &a);
 	void DelCurr();
-	
+
 	void Reset();
 	void GoNext();
 	bool IsEnd();
@@ -134,7 +134,7 @@ void TList<T>::InsCurr(const T &a)
 	if (pCurr == pFirst) {
 		InsFirst(a);
 	}
-	else if (pCurr == pStop) {
+	else if (pCurr == NULL) {
 		throw "Error InsCurr: Stop";
 	}
 	else {
