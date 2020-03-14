@@ -58,7 +58,7 @@ TList<T>::~TList()
 template <class T>
 T TList<T>::GetCurrEl()
 {
-	if (pCurr == pStop) {
+	if (pCurr == NULL) {
 		throw "Error GetCurrEl";
 	}
 	return pCurr->val;

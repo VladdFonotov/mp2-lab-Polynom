@@ -20,8 +20,9 @@ public:
 		int pxyz;
 		cout << "Enter coefficient: ";
 		in >> m.coef;
-		cout << endl << "Enter power: ";
+		cout <<  "Enter power: ";
 		in >> pxyz;
+		cout << endl;
 		m.p_x = pxyz / 100;
 		m.p_y = pxyz / 10 % 10;
 		m.p_z = pxyz % 10;
@@ -240,8 +241,14 @@ public:
 					else
 					{
 						pCurr->val = rm;
-						GoNext();
-						Q.GoNext();
+						if (&Q == this) {
+							GoNext();
+						}
+						else
+						{
+							GoNext();
+							Q.GoNext();
+						}
 					}
 				}
 			}
@@ -254,7 +261,7 @@ public:
 		TMonom m;
 		in >> m;
 		while (m.coef != 0) {
-			p.InsLast(m);
+			p.AddMonom(m);
 			in >> m;
 		}
 		return in;

@@ -125,6 +125,71 @@ TEST(TPolynom, can_add_monom)
 	ASSERT_NO_THROW(p * a);
 	ASSERT_NO_THROW(p *=a);
 }
+
+TEST(TPolynom,sklad_monom_s_protiv_koef)
+{
+	TPolynom pol;
+	TMonom m[3];
+	for (int i = 0; i < 3; i++)
+	{
+		m[i].coef = 7 * pow(-1, i);
+		m[i].p_x = i / 2;
+		m[i].p_y = 2;
+		m[i].p_z = i;
+		pol.AddMonom(m[i]);
+	}
+	m[2].coef = -7;
+	pol.AddMonom(m[2]);
+	pol.Reset();
+	EXPECT_EQ(pol.GetCurrEl() == m[1], 1);
+}
+
+TEST(TPolynom, obnulenie_pol) {
+	TPolynom pol;
+	TMonom m;
+	m.coef = 5;
+	m.p_x = 1;
+	m.p_y = 1;
+	m.p_z = 1;
+	pol.AddMonom(m);
+	m.coef = -5;
+	pol.AddMonom(m);
+	pol.Reset();
+//	cout << pol.GetCurrEl() << endl;
+	EXPECT_EQ(pol.GetCurrEl().p_z == -1, 1);
+}
+
+TEST(TPolynom, proverka_koef) {
+	TPolynom pol;
+	TMonom m;
+	m.coef = 5;
+	m.p_x = 1;
+	m.p_y = 1;
+	m.p_z = 1;
+	pol.AddMonom(m);
+	pol.AddMonom(m);
+	pol.Reset();
+	EXPECT_EQ(pol.GetCurrEl().coef == 10, 1);
+}
+
+TEST(TPolynom, skald_monom_s_protiv_koef_posled) {
+	TPolynom pol;
+	TMonom m[3];
+	for (int i = 0; i < 3; i++)
+	{
+		m[i].coef = 7 * pow(-1, i);
+		m[i].p_x = i / 2;
+		m[i].p_y = 2;
+		m[i].p_z = i;
+		pol.AddMonom(m[i]);
+	}
+	m[0].coef = -7;
+	pol.AddMonom(m[0]);
+	pol.Reset();
+	pol.GoNext();
+	EXPECT_EQ(pol.GetCurrEl()==m[1], 1);
+}
+
 TEST(TPolynom, stop)
 {
 	system("pause");
